@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>摘要打分测试</title>
+</head>
+<body>
+    <form action="/search-post/" method="post">
+        {% csrf_token %}
+        摘要: <textarea type="text" name="summary" style="width:600px;height:200px;"></textarea>
+        原文: <textarea type="text" name="ori_doc" style="width:600px;height:200px;"></textarea>
+        <input type="submit" value="提交">
+    </form>
+
+    <p>摘要分数:{{ rlt }}</p>
+</body>
+</html>
