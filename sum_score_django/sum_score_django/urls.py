@@ -16,11 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from django.conf.urls import url
+from django.urls import re_path
 from . import scoring
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^search-post/$', scoring.score_post),
+    re_path(r'^search-post/$', scoring.score_post),
 ]
