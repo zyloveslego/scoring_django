@@ -116,7 +116,7 @@ model = settings.MY_MODEL
 
 
 # 近似摘要分数
-def scoring(input_summary, ori_doc):
+def scoring(input_summary, ori_doc, sum_length):
     ori_doc_sents = sent_tokenize(ori_doc)
 
     ori_doc_word_count = len(word_tokenize(ori_doc))
@@ -141,7 +141,15 @@ def scoring(input_summary, ori_doc):
     sents_cos = sorted(sents_cos.items(), key=lambda item: item[1], reverse=True)
     # print(sents_cos)
 
-    sent_limit = 10 if 10>len(ori_doc_sents) else len(ori_doc_sents)
+    sent_limit = 10 if 10 > len(ori_doc_sents) else len(ori_doc_sents)
+
+    if sum_length == "":
+        word_limit = int(ori_doc_word_count * 0.3 * 1.1)
+
+    else:
+        word_limit = int(sum_length)
+        # print(word_limit)
+        # print(type(word_limit))
 
     max_summ = ""
 
@@ -151,7 +159,7 @@ def scoring(input_summary, ori_doc):
     while(True):
         flag = 1
         for i, j in sents_cos[1:11]:
-            if len(word_tokenize(temp_max_summ)) + len(word_tokenize(i)) < int(ori_doc_word_count * 0.3 * 1.1):
+            if len(word_tokenize(temp_max_summ)) + len(word_tokenize(i)) < word_limit:
                 flag = 0
                 temp = cosine_similarity(ori_doc_embedding, model.encode(temp_max_summ + " " + i).reshape(1, -1))[0][0]
                 if temp > temp_max_summ_sim:
@@ -187,8 +195,15 @@ def score_post(request):
         # print(request.POST['ori_doc'])
         input_summary = request.POST['summary']
         ori_doc = request.POST['ori_doc']
+        sum_length = request.POST['length']
+        # print(sum_length)
+        # if sum_length == "":
+        #     print("sum_length is None")
 
-        final_score = scoring(input_summary, ori_doc)
+        if input_summary != "" and ori_doc != "":
+            final_score = scoring(input_summary, ori_doc, sum_length)
+            ctx['rlt'] = final_score
 
-        ctx['rlt'] = final_score
+        else:
+            ctx['rlt'] = "请输入摘要和原文"
     return render(request, "post_score.html", ctx)

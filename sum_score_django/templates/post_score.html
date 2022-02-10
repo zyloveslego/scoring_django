@@ -7,8 +7,9 @@
 <body>
     <form action="/search-post/" method="post">
         {% csrf_token %}
-        摘要: <textarea type="text" name="summary" style="width:600px;height:200px;"></textarea>
-        原文: <textarea type="text" name="ori_doc" style="width:600px;height:200px;"></textarea>
+        摘要: <textarea type="text" name="summary" style="width:400px;height:200px;"></textarea>
+        原文: <textarea type="text" name="ori_doc" style="width:400px;height:200px;"></textarea>
+        摘要长度（默认原文30%）: <input type="text" name="length"/>
         <input type="submit" value="提交">
     </form>
 
