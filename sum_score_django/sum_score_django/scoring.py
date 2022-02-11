@@ -180,7 +180,7 @@ def scoring(input_summary, ori_doc, sum_length):
     if final_score < 0:
         final_score = 0
 
-    return final_score
+    return final_score, input_summary_cos, ori_single_max_summ_cos
 
 
 
@@ -201,9 +201,10 @@ def score_post(request):
         #     print("sum_length is None")
 
         if input_summary != "" and ori_doc != "":
-            final_score = scoring(input_summary, ori_doc, sum_length)
+            final_score, input_summary_cos, ori_single_max_summ_cos = scoring(input_summary, ori_doc, sum_length)
             ctx['rlt'] = final_score
-
+            ctx['input_summary_cos'] = input_summary_cos
+            ctx['ori_single_max_summ_cos'] = ori_single_max_summ_cos
         else:
             ctx['rlt'] = "请输入摘要和原文"
     return render(request, "post_score.html", ctx)
