@@ -205,6 +205,38 @@ def score_post(request):
             ctx['rlt'] = final_score
             ctx['input_summary_cos'] = input_summary_cos
             ctx['ori_single_max_summ_cos'] = ori_single_max_summ_cos
+
+            ctx['summary'] = input_summary
+            ctx['ori_doc'] = ori_doc
+
+            if final_score>=97:
+                ctx['rank'] = "A+"
+            elif final_score>=93 and final_score<=96:
+                ctx['rank'] = "A"
+            elif final_score>=90 and final_score<=92:
+                ctx['rank'] = "A-"
+            elif final_score>=87 and final_score<=89:
+                ctx['rank'] = "B+"
+            elif final_score>=83 and final_score<=86:
+                ctx['rank'] = "B"
+            elif final_score>=80 and final_score<=82:
+                ctx['rank'] = "B-"
+            elif final_score>=77 and final_score<=79:
+                ctx['rank'] = "C+"
+            elif final_score>=73 and final_score<=76:
+                ctx['rank'] = "C"
+            elif final_score>=70 and final_score<=72:
+                ctx['rank'] = "C-"
+            elif final_score>=67 and final_score<=69:
+                ctx['rank'] = "D+"
+            elif final_score>=63 and final_score<=66:
+                ctx['rank'] = "D"
+            elif final_score>=60 and final_score<=62:
+                ctx['rank'] = "D-"
+            elif final_score<60:
+                ctx['rank'] = "F"
+
+
         else:
             ctx['rlt'] = "请输入摘要和原文"
     return render(request, "post_score.html", ctx)
