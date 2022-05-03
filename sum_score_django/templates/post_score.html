@@ -7,15 +7,42 @@
 <body>
     <form action="/search-post/" method="post">
         {% csrf_token %}
-        原文: <textarea type="text" name="ori_doc" style="width:400px;height:200px;">{{ ori_doc }}</textarea>
-        摘要: <textarea type="text" name="summary" style="width:400px;height:200px;">{{ summary }}</textarea>
-        摘要长度（默认原文30%）: <input type="text" name="length"/>
-        <input type="submit" value="提交">
+        Article: <textarea type="text" name="ori_doc" style="width:550px;height:400px;">{{ ori_doc }}</textarea>
+        Abstract: <textarea type="text" name="summary" style="width:550px;height:400px;">{{ summary }}</textarea>
+        <p></p><br>Abstract length（default 30% of total length or specify here）: <input type="text" name="length"/>
+        <p></p><br><input type="submit" value="Submit" style="width:100px;height:30px;">
     </form>
 
-    <p>摘要分数:{{ rlt }}</p>
-    <p>输入摘要cosine相似度:{{ input_summary_cos }}</p>
-    <p>oracle摘要cosine相似度:{{ ori_single_max_summ_cos }}</p>
-    <p>Rank:{{ rank }}</p>
+    <p></p>
+    <input type="button" id="hide" onclick="hidetext()" value="Detail" style="display: block;width:100px;height:30px;"/>
+    <div id="detail" style="display: none">
+    <p>Abstract score: {{ rlt }}</p>
+    <p>Cosine similarity between input and summary: {{ input_summary_cos }}</p>
+    <p>Oracle cosine similarity: {{ ori_single_max_summ_cos }}</p>
+    <p>Grade: {{ rank }}</p>
+    </div>
+
+    <script>
+        window.onload=function (){
+            var score = "{{rlt}}"
+            if (score === "") {
+                document.getElementById("hide").style.display = "none";
+            }
+        }
+
+       function hidetext(){
+           if(document.getElementById("detail").style.display === "block"){
+               document.getElementById("detail").style.display="none";
+               document.getElementById("hide").value="Detail";
+           }else {
+               document.getElementById("detail").style.display="block";
+               document.getElementById("hide").value="Hidden Detail";
+           }
+       }
+       function showtext() {
+           document.getElementById("hide").style.display = "block";
+       }
+
+    </script>
 </body>
 </html>
