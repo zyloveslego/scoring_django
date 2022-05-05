@@ -9,8 +9,8 @@
         {% csrf_token %}
         Article: <textarea type="text" onkeyup="wordStatic(this);" name="ori_doc" style="width:550px;height:400px;">{{ ori_doc }}</textarea>
         Abstract: <textarea type="text" name="summary" style="width:550px;height:400px;">{{ summary }}</textarea>
-        <p></p><br><nobr id="length">Abstract length: upto xxx words or specify here: </nobr><input type="text" name="length"/>
-        <p></p><br><input type="submit" value="Submit" style="width:100px;height:30px;">
+        <p></p><br><nobr id="length">Abstract length: upto 100 words or specify here: </nobr><input type="text" name="length"/>
+        <p></p><br><input type="submit" value="Submit" style="width:100px;height:30px;"><nobr id="grade" style="display: none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grade: {{ rank }}</nobr>
     </form>
 
     <p></p>
@@ -19,7 +19,6 @@
     <p>Abstract score: {{ rlt }}</p>
     <p>Cosine similarity between input and summary: {{ input_summary_cos }}</p>
     <p>Oracle cosine similarity: {{ ori_single_max_summ_cos }}</p>
-    <p>Grade: {{ rank }}</p>
     </div>
 
     <script>
@@ -27,6 +26,9 @@
             var score = "{{rlt}}"
             if (score === "") {
                 document.getElementById("hide").style.display = "none";
+                // document.getElementById("grade").style.display = "none";
+            }else {
+                document.getElementById("grade").style.display = "inline";
             }
         }
 
