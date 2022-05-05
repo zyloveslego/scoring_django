@@ -9,7 +9,7 @@
         {% csrf_token %}
         Article: <textarea type="text" onkeyup="wordStatic(this);" name="ori_doc" style="width:550px;height:400px;">{{ ori_doc }}</textarea>
         Abstract: <textarea type="text" name="summary" style="width:550px;height:400px;">{{ summary }}</textarea>
-        <p></p><br><nobr id="length">upto _ words or specify here: </nobr><input type="text" name="length"/>
+        <p></p><br><nobr id="length">Abstract length: upto _ words or specify here: </nobr><input type="text" name="length"/>
         <p></p><br><input type="submit" value="Submit" style="width:100px;height:30px;">
     </form>
 
@@ -56,7 +56,7 @@
             // 将换行符不计算为单词数
             var count = getWordCount(value)
             // 更新计数
-            content.innerText = "upto " + parseInt(0.3 * count) + " words or specify here:";
+            content.innerText = "Abstract length: upto " + parseInt(0.3 * count) + " words or specify here:";
         }
     }
 
