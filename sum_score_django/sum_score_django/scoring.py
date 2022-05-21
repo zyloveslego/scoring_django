@@ -7,6 +7,7 @@ from django.conf import settings
 # model = SentenceTransformer('all-MiniLM-L6-v2')
 
 # import numpy as np
+
 from sklearn.metrics.pairwise import cosine_similarity
 # import os
 # import matplotlib.pyplot as plt
@@ -16,6 +17,9 @@ from nltk.tokenize import word_tokenize
 import string
 import itertools
 from nltk.tokenize import sent_tokenize
+from django.http import HttpResponse
+
+import json
 
 model = settings.MY_MODEL
 
@@ -240,3 +244,68 @@ def score_post(request):
         else:
             ctx['rlt'] = "请输入摘要和原文"
     return render(request, "post_score.html", ctx)
+
+
+# 返回分数api
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def score_api(request):
+    # resp = "score"
+
+    ctx = {}
+    print(request.POST)
+    if request.POST:
+        # print(request.POST['summary'])
+        # print(request.POST['ori_doc'])
+        input_summary = request.POST['summary']
+        ori_doc = request.POST['ori_doc']
+        sum_length = request.POST['length']
+        # print(sum_length)
+        # if sum_length == "":
+        #     print("sum_length is None")
+
+        if input_summary != "" and ori_doc != "":
+            final_score, input_summary_cos, ori_single_max_summ_cos = scoring(input_summary, ori_doc, sum_length)
+            ctx['rlt'] = final_score
+            # ctx['input_summary_cos'] = input_summary_cos
+            # ctx['ori_single_max_summ_cos'] = ori_single_max_summ_cos
+
+            # ctx['summary'] = input_summary
+            # ctx['ori_doc'] = ori_doc
+
+            if final_score>=97:
+                ctx['rank'] = "A+"
+            elif final_score>=93 and final_score<=96:
+                ctx['rank'] = "A"
+            elif final_score>=90 and final_score<=92:
+                ctx['rank'] = "A-"
+            elif final_score>=87 and final_score<=89:
+                ctx['rank'] = "B+"
+            elif final_score>=83 and final_score<=86:
+                ctx['rank'] = "B"
+            elif final_score>=80 and final_score<=82:
+                ctx['rank'] = "B-"
+            elif final_score>=77 and final_score<=79:
+                ctx['rank'] = "C+"
+            elif final_score>=73 and final_score<=76:
+                ctx['rank'] = "C"
+            elif final_score>=70 and final_score<=72:
+                ctx['rank'] = "C-"
+            elif final_score>=67 and final_score<=69:
+                ctx['rank'] = "D+"
+            elif final_score>=63 and final_score<=66:
+                ctx['rank'] = "D"
+            elif final_score>=60 and final_score<=62:
+                ctx['rank'] = "D-"
+            elif final_score<60:
+                ctx['rank'] = "F"
+
+
+        else:
+            ctx['rlt'] = "请输入摘要和原文"
+
+
+    print(ctx)
+    return HttpResponse(json.dumps(ctx), content_type="application/json")
+
