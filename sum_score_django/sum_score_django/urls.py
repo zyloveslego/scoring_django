@@ -23,4 +23,5 @@ from . import scoring
 urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r'^search-post/$', scoring.score_post),
+    re_path(r'^score_api/$', scoring.score_api),
 ]
